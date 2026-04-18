@@ -124,8 +124,9 @@ python -m graphify query "<질문>" --budget 2000
 
 ### 2. wiki 페이지 또는 raw 파일 읽기
 
-찾은 노드에 대응하는 wiki 페이지가 있으면 읽는다.
-wiki 페이지가 없으면 해당 노드의 raw 소스 파일을 읽는다.
+- wiki 있고 `status: stable` → wiki만 읽기 (신뢰된 지식)
+- wiki 있고 `status: draft` → wiki + raw 같이 읽기 (draft는 오류 가능성 있음)
+- wiki 없음 → raw 파일 읽기
 
 ### 3. 답변 + 없으면 ingest
 

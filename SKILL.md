@@ -109,7 +109,8 @@ Find relevant nodes. This is the navigator — it tells you what to read next.
 ### Step 2 — Read wiki pages if they exist
 
 For each relevant node found, check if a corresponding wiki page exists in `LLM Wiki/wiki/`.
-- Wiki page exists → read it (synthesized knowledge, fast)
+- Wiki page exists AND `status: stable` → read wiki only (trusted knowledge)
+- Wiki page exists BUT `status: draft` → read wiki AND the raw source file (`source_file` in frontmatter) to cross-check. Draft pages may contain errors.
 - Wiki page doesn't exist → read the raw source file it came from
 
 ### Step 3 — Answer + ingest if needed
