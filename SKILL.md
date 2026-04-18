@@ -31,12 +31,12 @@ Run these steps in order. Do not skip steps.
 
 ### Step 1 — Collect source
 
-If a URL was given:
+If a URL was given: run immediately without asking.
 ```bash
 python -m graphify add <url> --dir raw/crawled
 ```
 
-If only a title or keyword was given: search the web for the most relevant URL (paper, article, official page), confirm with the user, then run the command above.
+If only a title or keyword was given: search the web for the most relevant URL (paper, article, official page), show the user what you found and ask for confirmation. After confirmation, run the command above.
 
 If it fails, tell the user what went wrong and stop.
 
