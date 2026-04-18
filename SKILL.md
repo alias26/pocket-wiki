@@ -18,6 +18,27 @@ Manage a personal knowledge base built on Graphify + LLM Wiki pattern.
 
 ## What You Must Do When Invoked
 
+### Step 0 — Find repo root
+
+Before anything else, find the pocket-wiki repo root and use it for all subsequent commands:
+
+```bash
+# Find the directory containing CLAUDE.md with pocket-wiki content
+REPO_ROOT=$(pwd)
+while [ ! -f "$REPO_ROOT/CLAUDE.md" ] || ! grep -q "pocket-wiki" "$REPO_ROOT/CLAUDE.md" 2>/dev/null; do
+    PARENT=$(dirname "$REPO_ROOT")
+    if [ "$PARENT" = "$REPO_ROOT" ]; then
+        echo "ERROR: pocket-wiki repo not found. Run claude from the pocket-wiki directory."
+        exit 1
+    fi
+    REPO_ROOT="$PARENT"
+done
+echo "Repo root: $REPO_ROOT"
+cd "$REPO_ROOT"
+```
+
+All subsequent bash commands must run from `$REPO_ROOT`. Use absolute paths derived from it (e.g. `$REPO_ROOT/raw/crawled`, `$REPO_ROOT/graphify-out`).
+
 Parse the argument after `/pocket-wiki`:
 - If it starts with `query` → run QUERY flow
 - If it starts with `lint` → run LINT flow
@@ -33,7 +54,7 @@ Run these steps in order. Do not skip steps.
 
 If a URL was given: run immediately without asking.
 ```bash
-python -m graphify add <url> --dir raw/crawled
+cd "$REPO_ROOT" && python -m graphify add <url> --dir raw/crawled
 ```
 
 If only a title or keyword was given: search the web for the most relevant URL (paper, article, official page), show the user what you found and ask for confirmation. After confirmation, run the command above.
@@ -43,7 +64,7 @@ If it fails, tell the user what went wrong and stop.
 ### Step 2 — Update graph
 
 ```bash
-python -m graphify --update
+cd "$REPO_ROOT" && python -m graphify --update
 ```
 
 ### Step 3 — Discuss with user
@@ -88,7 +109,7 @@ Always read `LLM Wiki/_meta/index.md` first to find relevant pages.
 ### Step 2 — Traverse graph (supplement)
 
 ```bash
-python -m graphify query "<question>" --budget 2000
+cd "$REPO_ROOT" && python -m graphify query "<question>" --budget 2000
 ```
 
 Use this to find connections index.md didn't surface.
