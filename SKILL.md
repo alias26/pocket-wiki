@@ -98,25 +98,29 @@ Append to `LLM Wiki/_meta/log.md`:
 
 ## QUERY flow
 
-### Step 1 — Read index first
-
-Always read `LLM Wiki/_meta/index.md` first to find relevant pages.
-
-### Step 2 — Traverse graph (supplement)
+### Step 1 — Traverse graph
 
 ```bash
-cd "$REPO_ROOT" && python -m graphify query "<question>" --budget 2000
+cd "$POCKET_ROOT" && python -m graphify query "<question>" --budget 2000
 ```
 
-Use this to find connections index.md didn't surface.
+Find relevant nodes. This is the navigator — it tells you what to read next.
 
-### Step 3 — Read wiki pages and answer
+### Step 2 — Read wiki pages if they exist
 
-Read the relevant pages. Synthesize an answer with citations.
+For each relevant node found, check if a corresponding wiki page exists in `LLM Wiki/wiki/`.
+- Wiki page exists → read it (synthesized knowledge, fast)
+- Wiki page doesn't exist → read the raw source file it came from
 
-### Step 4 — File answer back into wiki
+### Step 3 — Answer + ingest if needed
 
-If the answer contains a comparison, analysis, or newly discovered connection — save it as a new wiki page in `LLM Wiki/wiki/<domain>/`. Good answers compound knowledge.
+Synthesize and answer.
+
+If wiki pages were missing and you read raw files instead:
+- Write wiki pages now (same as INGEST steps 4-6)
+- Next time the same topic comes up, wiki will be ready
+
+If the answer itself contains a comparison, analysis, or newly discovered connection — save it as a new wiki page too. Good answers compound knowledge.
 
 Append to `LLM Wiki/_meta/log.md`:
 ```
