@@ -1,41 +1,43 @@
 # pocket-wiki setup (Windows)
 
-Write-Host "pocket-wiki 설치 시작..." -ForegroundColor Cyan
+Write-Host "Setting up pocket-wiki..." -ForegroundColor Cyan
 
-# 1. graphify 설치
-Write-Host "`n[1/4] graphify 설치..."
+# 1. Install graphify
+Write-Host ""
+Write-Host "[1/4] Installing graphify..."
 pip install graphifyy -q
-if ($LASTEXITCODE -ne 0) { Write-Host "graphify 설치 실패. pip이 설치되어 있는지 확인하세요." -ForegroundColor Red; exit 1 }
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Failed to install graphify. Make sure pip is installed." -ForegroundColor Red
+    exit 1
+}
 
-# 2. Claude Code 스킬 등록
-Write-Host "[2/4] Claude Code 스킬 등록..."
-graphify install --platform claude
+# 2. Register Claude Code skill
+Write-Host "[2/4] Registering Claude Code skill..."
+python -m graphify install --platform claude
 
-# 3. 폴더 구조 생성
-Write-Host "[3/4] 폴더 구조 생성..."
-New-Item -ItemType Directory -Force -Path "raw/files" | Out-Null
-New-Item -ItemType Directory -Force -Path "raw/crawled" | Out-Null
+# 3. Create folder structure
+Write-Host "[3/4] Creating folder structure..."
+New-Item -ItemType Directory -Force -Path "raw\files" | Out-Null
+New-Item -ItemType Directory -Force -Path "raw\crawled" | Out-Null
 New-Item -ItemType Directory -Force -Path "graphify-out" | Out-Null
-New-Item -ItemType Directory -Force -Path "LLM Wiki/graph" | Out-Null
-New-Item -ItemType Directory -Force -Path "LLM Wiki/wiki/sources" | Out-Null
-New-Item -ItemType Directory -Force -Path "LLM Wiki/_meta" | Out-Null
-Write-Host "폴더 생성 완료"
+New-Item -ItemType Directory -Force -Path "LLM Wiki\graph" | Out-Null
+New-Item -ItemType Directory -Force -Path "LLM Wiki\wiki\sources" | Out-Null
+New-Item -ItemType Directory -Force -Path "LLM Wiki\_meta" | Out-Null
+Write-Host "Folders created."
 
-# 4. 안내
-Write-Host "`n[4/4] 완료!" -ForegroundColor Green
-Write-Host @"
-
-다음 단계:
-  1. Obsidian에서 'LLM Wiki/' 폴더를 vault로 열기
-  2. Community Plugins > Local REST API 플러그인 설치 및 활성화
-  3. 이 디렉토리에서 Claude Code 실행:
-       cd $(Get-Location)
-       claude
-
-소스 추가:
-  graphify add <url> --dir raw/crawled
-
-wiki 빌드:
-  /graphify 대화창에서 입력 또는
-  "graphify로 raw/ 처리해줘" 라고 Claude에게 요청
-"@
+# 4. Done
+Write-Host ""
+Write-Host "[4/4] Done!" -ForegroundColor Green
+Write-Host ""
+Write-Host "Next steps:"
+Write-Host "  1. Open 'LLM Wiki/' as your Obsidian vault"
+Write-Host "  2. Install 'Local REST API' community plugin and enable it"
+Write-Host "  3. Run Claude Code from this directory:"
+Write-Host "       cd $(Get-Location)"
+Write-Host "       claude"
+Write-Host ""
+Write-Host "Add a source:"
+Write-Host "  python -m graphify add [url] --dir raw/crawled"
+Write-Host ""
+Write-Host "Build wiki:"
+Write-Host "  Tell Claude: 'ingest [source name]'"
