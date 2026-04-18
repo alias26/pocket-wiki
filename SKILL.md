@@ -71,7 +71,7 @@ Read the raw source file from `raw/crawled/` or `raw/files/`. Share the key clai
 
 ### Step 4 — Write source page
 
-Create `LLM Wiki/wiki/sources/<slug>.md`:
+Create `LLM Wiki/wiki/sources/<slug>-source.md`:
 - Frontmatter: type=source, author, added (today), domain, source_url, source_file (path to raw file), status=summarized
 - Body: 핵심 주장, 유저 관점 반영한 내 메모, ## 관련 section with [[wikilinks]]
 - `[[wikilinks]]` go in body only, never in frontmatter
@@ -80,7 +80,7 @@ Create `LLM Wiki/wiki/sources/<slug>.md`:
 
 For each key concept or entity in the source:
 - If `LLM Wiki/wiki/<domain>/<concept>.md` exists → update it (note contradictions explicitly)
-- If it doesn't exist → create it as `wiki/<domain>/<slug>-concept.md` with frontmatter: type=concept, domain, tags, updated (today), status=draft
+- If it doesn't exist → create it as `wiki/<domain>/<slug>.md` with frontmatter: type=concept, domain, tags, updated (today), status=draft
 
 A single source can touch 10-15 pages.
 
