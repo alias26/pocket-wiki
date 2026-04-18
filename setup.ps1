@@ -19,6 +19,10 @@ $skillDir = "$env:USERPROFILE\.claude\skills\pocket-wiki"
 New-Item -ItemType Directory -Force -Path $skillDir | Out-Null
 Copy-Item -Path "SKILL.md" -Destination "$skillDir\SKILL.md" -Force
 
+$config = '{"pocketRoot": "' + (Get-Location).Path.Replace('\', '/') + '"}'
+$config | Out-File -FilePath "$skillDir\config.json" -Encoding utf8
+Write-Host "pocketRoot set to: $(Get-Location)"
+
 $claudeMd = "$env:USERPROFILE\.claude\CLAUDE.md"
 $entry = "# pocket-wiki`n- **pocket-wiki** (``~/.claude/skills/pocket-wiki/SKILL.md``) - personal knowledge base. Trigger: ``/pocket-wiki```n"
 if (-not (Test-Path $claudeMd) -or -not (Select-String -Path $claudeMd -Pattern "pocket-wiki" -Quiet)) {

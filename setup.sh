@@ -16,6 +16,8 @@ python3 -m graphify install --platform claude
 SKILL_DIR="$HOME/.claude/skills/pocket-wiki"
 mkdir -p "$SKILL_DIR"
 cp SKILL.md "$SKILL_DIR/SKILL.md"
+echo "{\"pocketRoot\": \"$(pwd)\"}" > "$SKILL_DIR/config.json"
+echo "pocketRoot set to: $(pwd)"
 
 CLAUDE_MD="$HOME/.claude/CLAUDE.md"
 if ! grep -q "pocket-wiki" "$CLAUDE_MD" 2>/dev/null; then

@@ -20,24 +20,20 @@ Manage a personal knowledge base built on Graphify + LLM Wiki pattern.
 
 ### Step 0 — Find repo root
 
-Before anything else, find the pocket-wiki repo root and use it for all subsequent commands:
+Before anything else, read `pocketRoot` from the config file saved during setup:
 
 ```bash
-# Find the directory containing CLAUDE.md with pocket-wiki content
-REPO_ROOT=$(pwd)
-while [ ! -f "$REPO_ROOT/CLAUDE.md" ] || ! grep -q "pocket-wiki" "$REPO_ROOT/CLAUDE.md" 2>/dev/null; do
-    PARENT=$(dirname "$REPO_ROOT")
-    if [ "$PARENT" = "$REPO_ROOT" ]; then
-        echo "ERROR: pocket-wiki repo not found. Run claude from the pocket-wiki directory."
-        exit 1
-    fi
-    REPO_ROOT="$PARENT"
-done
-echo "Repo root: $REPO_ROOT"
-cd "$REPO_ROOT"
+CONFIG="$HOME/.claude/skills/pocket-wiki/config.json"
+if [ ! -f "$CONFIG" ]; then
+    echo "ERROR: pocket-wiki not set up. Run setup.ps1 or setup.sh first."
+    exit 1
+fi
+POCKET_ROOT=$(python3 -c "import json; print(json.load(open('$CONFIG'))['pocketRoot'])")
+echo "pocketRoot: $POCKET_ROOT"
+cd "$POCKET_ROOT"
 ```
 
-All subsequent bash commands must run from `$REPO_ROOT`. Use absolute paths derived from it (e.g. `$REPO_ROOT/raw/crawled`, `$REPO_ROOT/graphify-out`).
+All subsequent bash commands must run from `$POCKET_ROOT`.
 
 Parse the argument after `/pocket-wiki`:
 - If it starts with `query` → run QUERY flow
