@@ -9,9 +9,23 @@ echo "[1/4] Installing graphify..."
 pip install graphifyy -q || pip3 install graphifyy -q
 if [ $? -ne 0 ]; then echo "Failed to install graphify. Make sure pip is installed."; exit 1; fi
 
-# 2. Register Claude Code skill
-echo "[2/4] Registering Claude Code skill..."
+# 2. Register Claude Code skills
+echo "[2/4] Registering Claude Code skills..."
 python3 -m graphify install --platform claude
+
+SKILL_DIR="$HOME/.claude/skills/pocket-wiki"
+mkdir -p "$SKILL_DIR"
+cp SKILL.md "$SKILL_DIR/SKILL.md"
+
+CLAUDE_MD="$HOME/.claude/CLAUDE.md"
+if ! grep -q "pocket-wiki" "$CLAUDE_MD" 2>/dev/null; then
+    echo "" >> "$CLAUDE_MD"
+    echo "# pocket-wiki" >> "$CLAUDE_MD"
+    echo "- **pocket-wiki** (\`~/.claude/skills/pocket-wiki/SKILL.md\`) - personal knowledge base. Trigger: \`/pocket-wiki\`" >> "$CLAUDE_MD"
+    echo "pocket-wiki skill registered."
+else
+    echo "pocket-wiki skill already registered."
+fi
 
 # 3. Create folder structure
 echo "[3/4] Creating folder structure..."
@@ -33,7 +47,7 @@ echo "       cd $(pwd)"
 echo "       claude"
 echo ""
 echo "Add a source:"
-echo "  python3 -m graphify add <url> --dir raw/crawled"
+echo "  /pocket-wiki <url or title>"
 echo ""
-echo "Build wiki:"
-echo "  Tell Claude: 'ingest [source name]'"
+echo "Query your wiki:"
+echo "  /pocket-wiki query <question>"
