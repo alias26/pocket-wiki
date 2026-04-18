@@ -55,7 +55,7 @@ Read the raw source file from `raw/crawled/` or `raw/files/`. Share the key clai
 ### Step 4 — Write source page
 
 Create `LLM Wiki/wiki/sources/<slug>.md`:
-- Frontmatter: type=source, author, added (today), domain, source_url, status=summarized
+- Frontmatter: type=source, author, added (today), domain, source_url, source_file (path to raw file), status=summarized
 - Body: 핵심 주장, 유저 관점 반영한 내 메모, ## 관련 section with [[wikilinks]]
 - `[[wikilinks]]` go in body only, never in frontmatter
 

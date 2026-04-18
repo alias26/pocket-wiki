@@ -14,6 +14,7 @@ author:
 added: YYYY-MM-DD
 domain:
 source_url:
+source_file:
 status: summarized
 ---
 ```
