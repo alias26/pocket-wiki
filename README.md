@@ -7,13 +7,17 @@ Inspired by [Andrej Karpathy's LLM Wiki concept](https://gist.github.com/karpath
 ## How it works
 
 ```
-raw/          →   graphify   →   LLM Wiki/graph/    (Obsidian graph nodes)
-(your sources)    --update       LLM Wiki/wiki/     (Claude-written summaries)
+raw/              →   graphify --update   →   graphify-out/graph.json
+(your sources)                                (knowledge graph for Claude)
+                  →   /pocket-wiki        →   LLM Wiki/wiki/
+                      (Claude)                (human-readable summaries)
 ```
 
-- **raw/**: Drop papers, articles, notes here. Never committed — stays local.
-- **graph/**: Auto-generated knowledge graph nodes by Graphify. Visualized in Obsidian.
-- **wiki/**: Curated summaries written by Claude. The knowledge that persists across sessions.
+- **raw/**: Your source files. Never committed — stays local.
+- **graphify-out/graph.json**: Knowledge graph Claude uses to navigate sources efficiently.
+- **wiki/**: Curated pages written by Claude. The knowledge that persists across sessions.
+  - `wiki/sources/<slug>-source.md` — one page per source
+  - `wiki/<domain>/<concept>.md` — concept/entity pages
 
 ## Prerequisites
 
@@ -40,27 +44,21 @@ Then:
 
 ## Usage
 
-### Add a source
-```bash
-python -m graphify add <url> --dir raw/crawled
+### Add a source and build wiki
 ```
-
-### Update the knowledge graph
-```bash
-python -m graphify --update
+/pocket-wiki <url or title>
 ```
-
-### Build wiki pages
-Tell Claude:
-```
-"<source name> ingest해줘"
-```
-Claude reads the graph and writes structured wiki pages into `LLM Wiki/wiki/`.
+Claude fetches the source, updates the graph, discusses key points with you, and writes wiki pages.
 
 ### Query your knowledge
-Just ask Claude:
 ```
-"Transformer 아키텍처 설명해줘"
+/pocket-wiki query <question>
+```
+Claude searches the wiki and answers. If wiki pages are missing, it reads raw sources and writes them on the fly.
+
+### Health check
+```
+/pocket-wiki lint
 ```
 
 ## Folder structure
@@ -69,13 +67,15 @@ Just ask Claude:
 pocket-wiki/
 ├── raw/
 │   ├── files/       # manually added files
-│   └── crawled/     # graphify add output
+│   └── crawled/     # fetched by /pocket-wiki
 ├── LLM Wiki/
-│   ├── wiki/        # Claude-written pages (gitignored — yours only)
-│   ├── graph/       # Graphify nodes (gitignored — auto-generated)
-│   └── _meta/       # schema, index, log
+│   ├── wiki/
+│   │   ├── sources/     # <slug>-source.md per source
+│   │   └── <domain>/    # concept pages
+│   └── _meta/           # schema, index, log
 ├── graphify-out/    # graph.json (gitignored)
 ├── CLAUDE.md        # workflow instructions for Claude
+├── SKILL.md         # /pocket-wiki skill definition
 ├── setup.sh
 └── setup.ps1
 ```
