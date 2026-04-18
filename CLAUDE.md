@@ -16,7 +16,7 @@ raw 소스를 지식 그래프로 변환하고, 인간이 읽을 수 있는 wiki
 └── LLM Wiki/               Obsidian vault
     ├── graph/              Graphify --obsidian 자동 출력 (절대 수정하지 않음)
     ├── wiki/
-    │   ├── sources/        소스별 요약 페이지 (ingest마다 1개)
+    │   ├── sources/        소스별 요약 페이지 (파일명: <slug>-source.md)
     │   └── <domain>/       개념/엔티티 페이지 (ml, systems, tools 등)
     └── _meta/
         ├── index.md        전체 wiki 목록 (ingest마다 업데이트)
@@ -84,7 +84,7 @@ python -m graphify --update
 
 ### 4. source 페이지 작성
 
-`wiki/sources/<제목>.md` 생성:
+`wiki/sources/<slug>-source.md` 생성:
 - 소스의 핵심 주장 요약
 - 유저 관점과 내 메모 포함
 - frontmatter: type=source
