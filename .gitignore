@@ -1,0 +1,18 @@
+# 개인 소스 파일
+raw/
+
+# Graphify 생성 결과물
+graphify-out/
+
+# 개인 wiki 콘텐츠
+LLM Wiki/wiki/
+LLM Wiki/graph/
+LLM Wiki/_meta/index.md
+LLM Wiki/_meta/log.md
+
+# Obsidian 개인 설정
+LLM Wiki/.obsidian/
+
+# 시스템
+.DS_Store
+Thumbs.db
