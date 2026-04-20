@@ -55,9 +55,12 @@ setup 스크립트가 하는 일:
 
 ### 소스 추가 및 wiki 작성
 ```
-/pocket-wiki <url 또는 제목>
+/pocket-wiki <url 또는 제목>           # quick 모드 (기본) — 논의 없이 자동 작성
+/pocket-wiki discuss <url 또는 제목>   # 관점 논의 후 작성
 ```
-Claude가 소스를 가져오고, 그래프를 업데이트하고, 핵심 포인트와 관점을 논의한 뒤 wiki 페이지를 작성합니다.
+**Quick 모드** (기본): Claude가 소스를 가져오고, 그래프를 업데이트하고, 대화 없이 wiki 페이지를 작성합니다. 페이지는 `status: draft`, `perspective: []`로 저장되어 나중에 검토할 수 있습니다. 대량 ingest에 적합.
+
+**Discuss 모드**: Claude가 핵심 포인트를 공유하고, 강조할 관점을 묻고, 작성 전 확인합니다. 중요한 소스에 적합.
 
 ### 지식 질의
 ```

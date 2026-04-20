@@ -55,9 +55,12 @@ Then:
 
 ### Add a source and build wiki
 ```
-/pocket-wiki <url or title>
+/pocket-wiki <url or title>           # quick mode (default) — no discussion
+/pocket-wiki discuss <url or title>   # discuss perspective before writing
 ```
-Claude fetches the source, updates the graph, discusses key points and perspective with you, then writes wiki pages.
+**Quick mode** (default): Claude fetches the source, updates the graph, and writes wiki pages without blocking on a conversation. Pages are saved as `status: draft` with empty `perspective` for later review. Best for bulk ingestion.
+
+**Discuss mode**: Claude shares key points, asks which perspective to emphasize, and confirms before writing. Best for sources you care about deeply.
 
 ### Query your knowledge
 ```

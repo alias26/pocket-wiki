@@ -60,8 +60,11 @@ status: draft | stable | archived
 
 ## INGEST
 
-When the user gives a source name or URL, run all steps below.
-The user only needs to say: "add X" or "ingest X".
+Two modes:
+- **Quick mode (default)** — `/pocket-wiki <url or title>` runs without discussion. Use sensible defaults and proceed.
+- **Discuss mode** — `/pocket-wiki discuss <url or title>` triggers the full perspective conversation.
+
+When the user gives a source name or URL without keywords, run quick mode.
 
 ### 1. Collect source
 
@@ -79,16 +82,20 @@ If it's a file: guide the user to copy it into `raw/files/`.
 Invoke the graphify skill: /graphify <POCKET_ROOT>/raw --update
 ```
 
-### 3. Discuss with user
+### 3. Discussion (mode-dependent)
 
-Do NOT write wiki pages yet.
+**Quick mode (default)** — skip this step:
+- No perspective conversation. Set `perspective: []` in new pages (user can fill in later).
+- If similar pages found (3+ shared tags or near-identical title), **auto-update** existing pages without asking. Mention what was auto-updated in the final summary.
+- Do not block on user input. Proceed to Step 4.
 
-**Before discussing perspective**, check if existing pages in the same domain have 3+ overlapping tags or a similar title.
-If found, inform the user: "Similar page already exists: [[X]] (overlapping tags: [...]) — options: update existing / create separate page / merge"
-
-Then share key claims and interesting points, and ask which perspective(s) to emphasize.
-Allowed values: `systems`, `practitioner`, `theory`, `history`, `interview`, `math` (multiple allowed)
-Reflect the user's direction when writing pages.
+**Discuss mode** (when invoked with `discuss` keyword):
+- Do NOT write wiki pages yet.
+- Before discussing perspective, check if existing pages in the same domain have 3+ overlapping tags or a similar title.
+- If found, inform the user: "Similar page already exists: [[X]] (overlapping tags: [...]) — options: update existing / create separate page / merge"
+- Then share key claims and interesting points, and ask which perspective(s) to emphasize.
+- Allowed values: `systems`, `practitioner`, `theory`, `history`, `interview`, `math` (multiple allowed)
+- Reflect the user's direction when writing pages.
 
 ### 4. Write source page
 
@@ -103,7 +110,7 @@ Create `wiki/sources/<slug>-source.md`:
 Identify concepts and entities from the source.
 - If a page exists → update it (explicitly note any contradictions with existing content)
 - If not → create `wiki/<domain>/<concept>.md`
-- frontmatter: type=concept, **perspective** (value chosen in Step 3)
+- frontmatter: type=concept, **perspective** (value chosen in Step 3 for discuss mode; `[]` for quick mode)
 
 **Update strategy:**
 - New information that extends existing content → append to the relevant section
@@ -119,9 +126,10 @@ _meta/log.md   — append work record
 
 log.md format (grep-parseable):
 ```
-## [YYYY-MM-DD] ingest | <source name>
+## [YYYY-MM-DD] ingest (quick|discuss) | <source name>
 pages created/updated: page1, page2, ...
 ```
+Tag the entry with `(quick)` or `(discuss)` so the user can later filter for review.
 
 If Step 3 resulted in a **structural decision** (merge, split, new domain, new frontmatter field), also append to `_meta/decisions.md`:
 ```
@@ -217,4 +225,4 @@ Append to `_meta/decisions.md`:
 - Never modify or delete files in `raw/`
 - Never modify files in `graphify-out/`
 - Never modify files in the `graph/` folder
-- Never write wiki pages without discussing with the user first (INGEST step 3)
+- Quick mode is the default — proceed without blocking the user. Use discuss mode only when the `discuss` keyword is explicitly given.

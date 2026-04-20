@@ -11,11 +11,12 @@ Manage a personal knowledge base built on Graphify + LLM Wiki pattern.
 ## Usage
 
 ```
-/pocket-wiki <url or title>       # ingest a new source
-/pocket-wiki query <question>     # query the wiki
-/pocket-wiki lint                 # health check
-/pocket-wiki decisions            # show decision history
-/pocket-wiki decisions add <title> # record a new structural decision
+/pocket-wiki <url or title>           # quick ingest — no discussion, defaults applied
+/pocket-wiki discuss <url or title>   # ingest with perspective discussion
+/pocket-wiki query <question>         # query the wiki
+/pocket-wiki lint                     # health check
+/pocket-wiki decisions                # show decision history
+/pocket-wiki decisions add <title>    # record a new structural decision
 ```
 
 ## What You Must Do When Invoked
@@ -41,7 +42,8 @@ Parse the argument after `/pocket-wiki`:
 - If it starts with `query` → run QUERY flow
 - If it starts with `lint` → run LINT flow
 - If it starts with `decisions` → run DECISIONS flow
-- Otherwise → run INGEST flow (treat the argument as a URL or search term)
+- If it starts with `discuss` → run INGEST flow in **discuss mode** (treat the rest as a URL or search term)
+- Otherwise → run INGEST flow in **quick mode** (default — treat the argument as a URL or search term)
 
 ---
 
@@ -66,23 +68,23 @@ If it fails, tell the user what went wrong and stop.
 cd "$REPO_ROOT" && python -m graphify --update
 ```
 
-### Step 3 — Discuss with user
+### Step 3 — Discussion (mode-dependent)
 
-Do NOT write wiki pages yet.
+**Quick mode (default)** — skip discussion entirely:
+- No perspective conversation. Set `perspective: []` in new pages (user can fill in later via `review`).
+- If similar pages found (3+ shared tags or near-identical title), **auto-update** existing pages rather than asking. Mention what was auto-updated in the summary at the end.
+- Do not block on user input. Proceed straight to Step 4.
 
-Read the raw source file from `raw/crawled/` or `raw/files/`. Share the key claims and interesting points with the user.
-
-**Before asking about perspective**, scan existing wiki pages in the same domain for potential overlaps:
-- Check for pages with the same or very similar title
-- Check for pages sharing 3+ tags with what you're about to write
-
-If overlapping pages found, show the user:
-> "Similar page already exists: [[X]] (overlapping tags: [...]).
-> Options: (a) update existing page, (b) create a new page for a distinct sub-topic, (c) merge"
-
-Then ask what angle or perspective to emphasize. Available perspectives: `systems`, `practitioner`, `theory`, `history`, `interview`, `math` — multiple can be combined.
-
-Wait for the user's response before proceeding.
+**Discuss mode** (when invoked with `discuss` keyword) — current full conversation:
+- Read the raw source file from `raw/crawled/` or `raw/files/`. Share key claims and interesting points with the user.
+- Before asking about perspective, scan existing wiki pages in the same domain:
+  - Pages with the same or very similar title
+  - Pages sharing 3+ tags with what you're about to write
+- If overlapping pages found, ask:
+  > "Similar page already exists: [[X]] (overlapping tags: [...]).
+  > Options: (a) update existing page, (b) create a new page for a distinct sub-topic, (c) merge"
+- Then ask which perspective(s) to emphasize. Allowed values: `systems`, `practitioner`, `theory`, `history`, `interview`, `math` (multiple allowed).
+- Wait for the user's response before proceeding.
 
 ### Step 4 — Write source page
 
@@ -95,7 +97,7 @@ Create `LLM Wiki/wiki/sources/<slug>-source.md`:
 
 For each key concept or entity in the source:
 - If `LLM Wiki/wiki/<domain>/<concept>.md` exists → update it (note contradictions explicitly)
-- If it doesn't exist → create it as `wiki/<domain>/<slug>.md` with frontmatter: type=concept, domain, tags, **perspective** (from Step 3 discussion), updated (today), status=draft
+- If it doesn't exist → create it as `wiki/<domain>/<slug>.md` with frontmatter: type=concept, domain, tags, **perspective** (from Step 3 discussion in discuss mode; `[]` in quick mode), updated (today), status=draft
 
 A single source can touch 10-15 pages.
 
@@ -105,11 +107,12 @@ Update `LLM Wiki/_meta/index.md`: add new pages with link + one-line summary.
 
 Append to `LLM Wiki/_meta/log.md`:
 ```
-## [YYYY-MM-DD] ingest | <source title>
+## [YYYY-MM-DD] ingest (quick|discuss) | <source title>
 생성/수정한 페이지: page1, page2, ...
 ```
+- Tag the entry with `(quick)` or `(discuss)` so the user can later filter for review.
 
-If Step 3 resulted in a **structural choice** (merge, split, new domain, new frontmatter field), append to `LLM Wiki/_meta/decisions.md`:
+If Step 3 (discuss mode only) resulted in a **structural choice** (merge, split, new domain, new frontmatter field), append to `LLM Wiki/_meta/decisions.md`:
 ```
 ## [YYYY-MM-DD]: <decision title>
 - **맥락**: <why this came up>
@@ -213,6 +216,6 @@ Then append to `LLM Wiki/_meta/decisions.md`:
 ## Rules
 
 - Never modify files in `raw/`, `graphify-out/`, or `LLM Wiki/graph/`
-- Never write wiki pages without discussing with the user first (INGEST step 3)
+- Quick mode is the default — proceed without blocking the user. Use `discuss` mode only when explicitly invoked.
 - `[[wikilinks]]` in body `## 관련` section only — never in frontmatter
 - If graph.json doesn't exist, tell the user to run `/pocket-wiki <source>` first
