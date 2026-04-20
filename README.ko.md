@@ -114,7 +114,6 @@ pocket-wiki/
 │   └── _meta/
 │       ├── schema.md    # frontmatter 규칙 + status 전이
 │       ├── decisions.md # 위키 구조 결정 (페이지 분리/병합 등)
-│       ├── issues.md    # 알려진 한계 + 우회 방법
 │       ├── index.md     # 전체 wiki 목록 (gitignore, 로컬 전용)
 │       └── log.md       # 작업 기록 (gitignore, 로컬 전용)
 ├── graphify-out/        # graph.json — gitignore, 로컬 전용
