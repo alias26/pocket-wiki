@@ -121,6 +121,7 @@ Identify concepts and entities from the source.
 **Update strategy:**
 - New information that extends existing content → append to the relevant section
 - Information that contradicts existing content → add a `> ⚠️ Contradiction: [source] says X, but [other source] says Y` blockquote in the affected section
+- If the existing page is `status: stable` and the new content introduces a real contradiction (not just an addition), **suggest demotion to `draft`** in the final summary. In discuss mode, ask before demoting; in quick mode, auto-demote and note it
 - Source attribution → add `[[<slug>-source]]` to the `## Related` section of the concept page
 
 ### 6. Update _meta/
@@ -221,7 +222,7 @@ Argument resolution:
 2. Show summary: current frontmatter + 2–3 sentence content recap
 3. Ask, in order (skip if not applicable):
    - **Perspective** — assign or change `perspective` field
-   - **Status** — promote: `draft` → `stable`, or `stable` → `archived`
+   - **Status** — propose a transition per `_meta/schema.md` (Status transitions). Never auto-promote to `stable`. If proposing `draft → stable`, first verify there are no unresolved `> ⚠️ Contradiction:` blockquotes
    - **Tags** — add/remove
    - **Content** — apply user-dictated edits (resolve contradiction, add section, etc.)
 4. Update the page's `updated` field to today
@@ -229,6 +230,12 @@ Argument resolution:
    ```
    ## [YYYY-MM-DD] review | <slug>
    changes: <what changed>
+   ```
+   For status transitions, include from→to and the reason:
+   ```
+   ## [YYYY-MM-DD] review | <slug>
+   status: draft → stable
+   reason: <why the user confirmed this transition>
    ```
 
 If review involves a **structural decision** (new precedent, contradiction-resolution rule), also append to `_meta/decisions.md`.

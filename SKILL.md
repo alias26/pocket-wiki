@@ -105,7 +105,7 @@ Create `LLM Wiki/wiki/sources/<slug>-source.md`:
 ### Step 5 — Update concept/entity pages
 
 For each key concept or entity in the source:
-- If `LLM Wiki/wiki/<domain>/<concept>.md` exists → update it (note contradictions explicitly)
+- If `LLM Wiki/wiki/<domain>/<concept>.md` exists → update it (note contradictions explicitly with `> ⚠️ Contradiction:` blockquote). If the existing page is `status: stable` and the new content introduces a real contradiction (not just an addition), **suggest demotion to `draft`** in the final summary so the user can review. In discuss mode, ask before demoting; in quick mode, auto-demote and note it
 - If it doesn't exist → create it as `wiki/<domain>/<slug>.md` with frontmatter: type=concept, domain, tags, **perspective** (auto-inferred in quick mode; user-chosen in discuss mode), updated (today), status=draft
 
 A single source can touch 10-15 pages.
@@ -216,7 +216,7 @@ Argument resolution:
 2. Show a brief summary: current frontmatter + 2–3 sentence content recap
 3. Ask the user what to change, in this order (skip if not applicable):
    - **Perspective** — assign or change `perspective` field. Allowed: `systems`, `practitioner`, `theory`, `history`, `interview`, `math`
-   - **Status** — promote or change: `draft` → `stable` (reviewed and trusted) or `stable` → `archived` (outdated/superseded)
+   - **Status** — propose a transition per the rules in `_meta/schema.md` (Status transitions section). Never auto-promote to `stable`. If proposing `draft → stable`, first verify there are no unresolved `> ⚠️ Contradiction:` blockquotes in the page
    - **Tags** — add/remove tags
    - **Content** — apply edits the user dictates (e.g. resolve a contradiction, add a section)
 4. Update the page's `updated` field to today
@@ -224,6 +224,12 @@ Argument resolution:
    ```
    ## [YYYY-MM-DD] review | <slug>
    changes: <comma-separated list of what changed>
+   ```
+   For status transitions specifically, include the from→to and the reason:
+   ```
+   ## [YYYY-MM-DD] review | <slug>
+   status: draft → stable
+   reason: <why the user confirmed this transition>
    ```
 
 If the review involves a **structural decision** (e.g. promoting a page to stable establishes a new precedent, or resolving a contradiction sets a rule), also append to `_meta/decisions.md`.
