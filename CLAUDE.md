@@ -85,13 +85,13 @@ Invoke the graphify skill: /graphify <POCKET_ROOT>/raw --update
 ### 3. Discussion (mode-dependent)
 
 **Quick mode (default)** — fully autonomous, no user input:
-- **Auto-infer `perspective`** from source type and content. Never leave empty. Inference rules:
+- **Auto-infer `perspective`** from source type and content. Never leave empty. Inference rules (canonical table in `_meta/schema.md`):
   - Paper / arxiv / academic source → `theory` (add `math` for heavy formal content)
   - Blog / tutorial / how-to / docs with code → `practitioner`
   - System internals / architecture / OS / hardware → `systems`
   - Tech evolution / version comparison / changelog → `history`
   - Interview prep / Q&A format → `interview`
-  - Combine multiple when content spans angles (e.g. applied ML paper → `[theory, practitioner]`)
+  - **Default to 1-2 perspectives.** The field's value is filtering — 4+ values dilute the signal. Add a 3rd only when the source genuinely covers that angle deeply
 - If similar pages found (3+ shared tags or near-identical title), **auto-update** existing pages without asking. Mention what was auto-updated in the final summary.
 - Do not block on user input. Proceed to Step 4.
 
@@ -182,6 +182,7 @@ Run a health check on the wiki when requested.
 2.5. **Semantic overlap** — find concept page pairs in the same domain sharing 3+ tags (merge/distinguish candidates)
 3. Find pages not linked to by any other page (inbound orphans)
 4. Find pages with `status: draft` that haven't been updated in a long time
+4.1. **Draft backlog warning** — Count total `status: draft` pages. If > 10, surface "draft backlog: N pages — consider running `/pocket-wiki review` to triage." If > 30, escalate the message ("backlog growing — quick-mode pages aren't being promoted")
 4.5. **Unlinked mentions** — find page titles appearing as plain text in other pages without `[[...]]` wrapping
 5. Find contradictions between concept pages
 6. Identify data gaps — suggest questions to investigate and sources to add

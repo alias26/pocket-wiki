@@ -74,13 +74,13 @@ cd "$REPO_ROOT" && python -m graphify --update
 ### Step 3 — Discussion (mode-dependent)
 
 **Quick mode (default)** — fully autonomous, no user input:
-- **Auto-infer `perspective`** from source type and content. Never leave empty. Inference rules:
+- **Auto-infer `perspective`** from source type and content. Never leave empty. Inference rules (canonical table in `_meta/schema.md`):
   - Paper / arxiv / academic source → `theory` (add `math` if heavy formal content)
   - Blog post / tutorial / how-to / docs with code → `practitioner`
   - System internals / architecture / OS / hardware docs → `systems`
   - Tech evolution / version history / changelog / comparison → `history`
   - Interview prep / Q&A format → `interview`
-  - Combine multiple when content spans angles (e.g. applied ML paper → `[theory, practitioner]`)
+  - **Default to 1-2 perspectives.** The field's value is filtering — 4+ values dilute the signal. Add a 3rd only when the source genuinely covers that angle deeply (e.g. a textbook chapter spanning theory, practitioner, and history)
 - If similar pages found (3+ shared tags or near-identical title), **auto-update** existing pages rather than asking. Mention what was auto-updated in the final summary.
 - Do not block on user input. Proceed straight to Step 4.
 
@@ -171,6 +171,7 @@ Check wiki health in order:
 2.5. **Semantic overlap** — For each domain, find concept page pairs sharing 3 or more tags. Report as potential duplicates or merge candidates. Example: "hash.md and binary-search-tree.md share tags [search, O(1), index] — consider if they need clearer distinction or cross-referencing."
 3. Find pages that no other page links to (inbound orphans)
 4. Find pages with `status: draft` that haven't been updated in a long time
+4.1. **Draft backlog warning** — Count total `status: draft` pages. If > 10, surface as "draft backlog: N pages — consider running `/pocket-wiki review` to triage." If > 30, escalate the message ("backlog growing — quick-mode pages aren't being promoted")
 4.5. **Unlinked mentions** — For each concept page title (and common aliases), search plain-text occurrences in other wiki pages that are NOT wrapped in `[[...]]`. Report as missing link opportunities. Example: "The word 'deadlock' appears in 3 pages without a wikilink to [[deadlock]]."
 5. Find contradictions between concept pages
 6. Identify data gaps — suggest new questions to investigate and new sources to add

@@ -112,8 +112,9 @@ pocket-wiki/
 │   │   ├── sources/     # <slug>-source.md per source
 │   │   └── <domain>/    # concept pages
 │   └── _meta/
-│       ├── schema.md    # frontmatter rules
+│       ├── schema.md    # frontmatter rules + status transitions
 │       ├── decisions.md # wiki structural decisions (page splits, merges, etc.)
+│       ├── issues.md    # known limitations & workarounds
 │       ├── index.md     # full wiki index (gitignored, local only)
 │       └── log.md       # work log (gitignored, local only)
 ├── graphify-out/        # graph.json — gitignored, local only

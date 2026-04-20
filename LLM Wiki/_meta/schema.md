@@ -47,6 +47,24 @@ status: draft | stable | archived
 Multiple values can be combined (e.g. `[systems, practitioner]`).
 Specifying perspective enables filters like "review only practitioner-perspective nodes" later on.
 
+**Default to 1-2 values.** Filtering value drops sharply when every page has 4+ perspectives. Add a 3rd only when the source genuinely covers that angle deeply.
+
+### Auto-inference mapping (used by quick mode)
+
+When `/pocket-wiki <url>` runs without `discuss`, perspective is inferred from the source type and content:
+
+| Source signal | Inferred perspective |
+|---|---|
+| arXiv / academic paper / formal whitepaper | `theory` (+ `math` if heavy proofs/equations) |
+| Blog post / tutorial / how-to / docs with code samples | `practitioner` |
+| OS internals / architecture spec / hardware reference | `systems` |
+| Changelog / version comparison / migration guide / tech evolution piece | `history` |
+| Interview prep / Q&A format / problem-solution lists | `interview` |
+| Pure math / statistics / probability content | `math` |
+| Compound source (e.g. applied-ML paper, systems textbook chapter) | combine 2 — e.g. `[theory, practitioner]` |
+
+Discuss mode (`/pocket-wiki discuss <url>`) skips this table and asks the user instead.
+
 ## Status transitions
 
 State machines for the `status` field. Transitions are explicit and never silent — the tool may suggest, but the user always confirms.
