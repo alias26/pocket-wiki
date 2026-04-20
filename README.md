@@ -31,15 +31,11 @@ raw/              →   graphify --update   →   graphify-out/graph.json
 
 ## Setup
 
-**Mac/Linux**
 ```bash
-bash setup.sh
+python setup.py
 ```
 
-**Windows**
-```powershell
-.\setup.ps1
-```
+(Use `python3` if your system requires it. Works the same on Mac, Linux, and Windows.)
 
 The setup script:
 1. Installs [Graphify](https://github.com/safishamsi/graphify) via pip (`pip install graphifyy`)
@@ -123,8 +119,7 @@ pocket-wiki/
 ├── graphify-out/        # graph.json — gitignored, local only
 ├── CLAUDE.md            # workflow instructions for Claude
 ├── SKILL.md             # /pocket-wiki skill definition
-├── setup.sh
-└── setup.ps1
+└── setup.py             # cross-platform setup (Mac / Linux / Windows)
 ```
 
 ## Syncing your wiki

@@ -31,15 +31,11 @@ raw/              →   graphify --update   →   graphify-out/graph.json
 
 ## 설치
 
-**Mac/Linux**
 ```bash
-bash setup.sh
+python setup.py
 ```
 
-**Windows**
-```powershell
-.\setup.ps1
-```
+(시스템에 따라 `python3`로 실행. Mac, Linux, Windows 동일하게 동작합니다.)
 
 setup 스크립트가 하는 일:
 1. [Graphify](https://github.com/safishamsi/graphify) 설치 (`pip install graphifyy`)
@@ -123,8 +119,7 @@ pocket-wiki/
 ├── graphify-out/        # graph.json — gitignore, 로컬 전용
 ├── CLAUDE.md            # Claude 워크플로우 지시
 ├── SKILL.md             # /pocket-wiki 스킬 정의
-├── setup.sh
-└── setup.ps1
+└── setup.py             # 크로스 플랫폼 설치 (Mac / Linux / Windows)
 ```
 
 ## wiki 동기화
