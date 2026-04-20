@@ -14,6 +14,8 @@ Manage a personal knowledge base built on Graphify + LLM Wiki pattern.
 /pocket-wiki <url or title>       # ingest a new source
 /pocket-wiki query <question>     # query the wiki
 /pocket-wiki lint                 # health check
+/pocket-wiki decisions            # show decision history
+/pocket-wiki decisions add <title> # record a new structural decision
 ```
 
 ## What You Must Do When Invoked
@@ -38,6 +40,7 @@ All subsequent bash commands must run from `$POCKET_ROOT`.
 Parse the argument after `/pocket-wiki`:
 - If it starts with `query` → run QUERY flow
 - If it starts with `lint` → run LINT flow
+- If it starts with `decisions` → run DECISIONS flow
 - Otherwise → run INGEST flow (treat the argument as a URL or search term)
 
 ---
@@ -59,19 +62,27 @@ If it fails, tell the user what went wrong and stop.
 
 ### Step 2 — Update graph
 
-Invoke the graphify skill with the raw directory and --update flag:
-
+```bash
+cd "$REPO_ROOT" && python -m graphify --update
 ```
-/graphify $POCKET_ROOT/raw --update
-```
-
-This runs incremental extraction on new/changed files and merges them into graph.json. Wait for it to complete before proceeding.
 
 ### Step 3 — Discuss with user
 
 Do NOT write wiki pages yet.
 
-Read the raw source file from `raw/crawled/` or `raw/files/`. Share the key claims and interesting points with the user. Ask what angle or perspective to emphasize. Wait for the user's response before proceeding.
+Read the raw source file from `raw/crawled/` or `raw/files/`. Share the key claims and interesting points with the user.
+
+**Before asking about perspective**, scan existing wiki pages in the same domain for potential overlaps:
+- Check for pages with the same or very similar title
+- Check for pages sharing 3+ tags with what you're about to write
+
+If overlapping pages found, show the user:
+> "Similar page already exists: [[X]] (overlapping tags: [...]).
+> Options: (a) update existing page, (b) create a new page for a distinct sub-topic, (c) merge"
+
+Then ask what angle or perspective to emphasize. Available perspectives: `systems`, `practitioner`, `theory`, `history`, `interview`, `math` — multiple can be combined.
+
+Wait for the user's response before proceeding.
 
 ### Step 4 — Write source page
 
@@ -84,7 +95,7 @@ Create `LLM Wiki/wiki/sources/<slug>-source.md`:
 
 For each key concept or entity in the source:
 - If `LLM Wiki/wiki/<domain>/<concept>.md` exists → update it (note contradictions explicitly)
-- If it doesn't exist → create it as `wiki/<domain>/<slug>.md` with frontmatter: type=concept, domain, tags, updated (today), status=draft
+- If it doesn't exist → create it as `wiki/<domain>/<slug>.md` with frontmatter: type=concept, domain, tags, **perspective** (from Step 3 discussion), updated (today), status=draft
 
 A single source can touch 10-15 pages.
 
@@ -96,6 +107,15 @@ Append to `LLM Wiki/_meta/log.md`:
 ```
 ## [YYYY-MM-DD] ingest | <source title>
 생성/수정한 페이지: page1, page2, ...
+```
+
+If Step 3 resulted in a **structural choice** (merge, split, new domain, new frontmatter field), append to `LLM Wiki/_meta/decisions.md`:
+```
+## [YYYY-MM-DD]: <decision title>
+- **맥락**: <why this came up>
+- **결정**: <what was decided>
+- **영향**: <what changed>
+- **대안**: <alternatives considered and why rejected>
 ```
 
 ---
@@ -141,8 +161,10 @@ Check wiki health in order:
 
 1. Compare `LLM Wiki/_meta/index.md` against actual files — find missing or mismatched entries
 2. Find `[[wikilinks]]` in body text that have no corresponding page (outbound orphans)
+2.5. **Semantic overlap** — For each domain, find concept page pairs sharing 3 or more tags. Report as potential duplicates or merge candidates. Example: "hash.md and binary-search-tree.md share tags [search, O(1), index] — consider if they need clearer distinction or cross-referencing."
 3. Find pages that no other page links to (inbound orphans)
 4. Find pages with `status: draft` that haven't been updated in a long time
+4.5. **Unlinked mentions** — For each concept page title (and common aliases), search plain-text occurrences in other wiki pages that are NOT wrapped in `[[...]]`. Report as missing link opportunities. Example: "The word 'deadlock' appears in 3 pages without a wikilink to [[deadlock]]."
 5. Find contradictions between concept pages
 6. Identify data gaps — suggest new questions to investigate and new sources to add
 
@@ -151,6 +173,39 @@ Append to `LLM Wiki/_meta/log.md`:
 ## [YYYY-MM-DD] lint
 발견한 문제: ...
 제안된 다음 소스: ...
+```
+
+If lint results in a **structural recommendation that gets acted upon** (schema change, merge/split decision, new rule), append to `LLM Wiki/_meta/decisions.md` using the same format as INGEST Step 6.
+
+---
+
+## DECISIONS flow
+
+Read `LLM Wiki/_meta/decisions.md` before doing anything else.
+
+### `/pocket-wiki decisions` (no subcommand)
+
+Display all decisions in reverse chronological order. Summarize in a readable format:
+- Date + title
+- One-line summary of what was decided and why
+
+Ask if the user wants to add a new decision or review a specific one in detail.
+
+### `/pocket-wiki decisions add <title>`
+
+Guide the user through recording a new structural decision interactively:
+1. Ask: **맥락** — 이 결정이 왜 필요했나?
+2. Ask: **결정** — 무엇을 어떻게 하기로 했나?
+3. Ask: **영향** — 기존 페이지나 워크플로우에 어떤 변화가 생기나?
+4. Ask: **대안** — 고려했다가 기각한 방법이 있나? (없으면 생략 가능)
+
+Then append to `LLM Wiki/_meta/decisions.md`:
+```
+## [YYYY-MM-DD]: <title>
+- **맥락**: ...
+- **결정**: ...
+- **영향**: ...
+- **대안**: ... (있을 때만)
 ```
 
 ---
