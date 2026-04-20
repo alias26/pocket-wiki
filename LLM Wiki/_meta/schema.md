@@ -4,7 +4,7 @@ type: meta
 
 # Wiki Page Schema
 
-## Source 페이지 (wiki/sources/)
+## Source pages (wiki/sources/)
 
 ```yaml
 ---
@@ -19,7 +19,7 @@ status: summarized | reviewed | superseded
 ---
 ```
 
-## Concept 페이지 (wiki/<domain>/)
+## Concept pages (wiki/<domain>/)
 
 ```yaml
 ---
@@ -27,30 +27,30 @@ title:
 type: concept
 domain:
 tags: []
-perspective: []   # optional — 이 페이지가 어떤 관점으로 쓰였는지
+perspective: []   # optional — the angle this page was written from
 updated: YYYY-MM-DD
 status: draft | stable | archived
 ---
 ```
 
-### `perspective` 허용 값
+### `perspective` allowed values
 
-| 값 | 의미 |
+| Value | Meaning |
 |---|---|
-| `systems` | 내부 동작·메모리·OS·하드웨어 관점 |
-| `practitioner` | 실무 적용·툴·코드 관점 |
-| `theory` | 수학·알고리즘·복잡도·증명 관점 |
-| `history` | 기술 진화·계보·버전 비교 관점 |
-| `interview` | 면접 Q&A·빈출 포인트 관점 |
-| `math` | 수식·통계·확률 관점 |
+| `systems` | Internals, memory, OS, hardware angle |
+| `practitioner` | Real-world application, tools, code angle |
+| `theory` | Math, algorithms, complexity, proofs angle |
+| `history` | Tech evolution, lineage, version comparison |
+| `interview` | Interview Q&A, frequently-asked angle |
+| `math` | Equations, statistics, probability angle |
 
-여러 개 조합 가능 (예: `[systems, practitioner]`).
-관점을 명시하면 나중에 "실무 관점으로 정리된 노드만 복습" 같은 필터가 가능.
+Multiple values can be combined (e.g. `[systems, practitioner]`).
+Specifying perspective enables filters like "review only practitioner-perspective nodes" later on.
 
-## 운영 규칙
+## Operating rules
 
-1. raw/ 소스는 절대 수정하지 않는다
-2. graph/ 폴더는 Graphify 전용 - 수정하지 않는다
-3. [[wikilinks]]는 frontmatter가 아닌 본문 ## 관련 섹션에 작성
-4. wiki/ 페이지 생성/수정 시 _meta/log.md에 기록
-5. concept 페이지 작성 시 perspective 필드를 채운다 (optional이지만 권장)
+1. Never modify sources in `raw/`
+2. The `graph/` folder is Graphify-only — never modify
+3. `[[wikilinks]]` belong in the body `## Related` section, not in frontmatter
+4. Record every wiki page creation/update in `_meta/log.md`
+5. Fill the `perspective` field when creating concept pages (optional but recommended)

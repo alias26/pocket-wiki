@@ -99,7 +99,7 @@ cd "$REPO_ROOT" && python -m graphify --update
 
 Create `LLM Wiki/wiki/sources/<slug>-source.md`:
 - Frontmatter: type=source, author, added (today), domain, source_url, source_file (path to raw file), status=summarized
-- Body: 핵심 주장, 유저 관점 반영한 내 메모, ## 관련 section with [[wikilinks]]
+- Body: key claims, your own notes reflecting the chosen perspective, `## Related` section with `[[wikilinks]]`
 - `[[wikilinks]]` go in body only, never in frontmatter
 
 ### Step 5 — Update concept/entity pages
@@ -117,17 +117,17 @@ Update `LLM Wiki/_meta/index.md`: add new pages with link + one-line summary.
 Append to `LLM Wiki/_meta/log.md`:
 ```
 ## [YYYY-MM-DD] ingest (quick|discuss) | <source title>
-생성/수정한 페이지: page1, page2, ...
+pages created/updated: page1, page2, ...
 ```
 - Tag the entry with `(quick)` or `(discuss)` so the user can later filter for review.
 
 If Step 3 (discuss mode only) resulted in a **structural choice** (merge, split, new domain, new frontmatter field), append to `LLM Wiki/_meta/decisions.md`:
 ```
 ## [YYYY-MM-DD]: <decision title>
-- **맥락**: <why this came up>
-- **결정**: <what was decided>
-- **영향**: <what changed>
-- **대안**: <alternatives considered and why rejected>
+- **Context**: <why this came up>
+- **Decision**: <what was decided>
+- **Impact**: <what changed>
+- **Alternatives**: <alternatives considered and why rejected>
 ```
 
 ---
@@ -162,7 +162,7 @@ If the answer itself contains a comparison, analysis, or newly discovered connec
 Append to `LLM Wiki/_meta/log.md`:
 ```
 ## [YYYY-MM-DD] query | <question summary>
-답변 저장 위치: wiki/domain/page.md
+answer saved at: wiki/domain/page.md
 ```
 
 ---
@@ -183,8 +183,8 @@ Check wiki health in order:
 Append to `LLM Wiki/_meta/log.md`:
 ```
 ## [YYYY-MM-DD] lint
-발견한 문제: ...
-제안된 다음 소스: ...
+issues found: ...
+suggested next sources: ...
 ```
 
 If lint results in a **structural recommendation that gets acted upon** (schema change, merge/split decision, new rule), append to `LLM Wiki/_meta/decisions.md` using the same format as INGEST Step 6.
@@ -228,7 +228,7 @@ Argument resolution:
 5. Append to `LLM Wiki/_meta/log.md`:
    ```
    ## [YYYY-MM-DD] review | <slug>
-   변경 사항: <comma-separated list of what changed>
+   changes: <comma-separated list of what changed>
    ```
 
 If the review involves a **structural decision** (e.g. promoting a page to stable establishes a new precedent, or resolving a contradiction sets a rule), also append to `_meta/decisions.md`.
@@ -250,18 +250,18 @@ Ask if the user wants to add a new decision or review a specific one in detail.
 ### `/pocket-wiki decisions add <title>`
 
 Guide the user through recording a new structural decision interactively:
-1. Ask: **맥락** — 이 결정이 왜 필요했나?
-2. Ask: **결정** — 무엇을 어떻게 하기로 했나?
-3. Ask: **영향** — 기존 페이지나 워크플로우에 어떤 변화가 생기나?
-4. Ask: **대안** — 고려했다가 기각한 방법이 있나? (없으면 생략 가능)
+1. Ask: **Context** — why was this decision needed?
+2. Ask: **Decision** — what was decided and how?
+3. Ask: **Impact** — what changes in existing pages or workflow?
+4. Ask: **Alternatives** — options considered but rejected? (omit if none)
 
 Then append to `LLM Wiki/_meta/decisions.md`:
 ```
 ## [YYYY-MM-DD]: <title>
-- **맥락**: ...
-- **결정**: ...
-- **영향**: ...
-- **대안**: ... (있을 때만)
+- **Context**: ...
+- **Decision**: ...
+- **Impact**: ...
+- **Alternatives**: ... (only if applicable)
 ```
 
 ---
@@ -270,5 +270,5 @@ Then append to `LLM Wiki/_meta/decisions.md`:
 
 - Never modify files in `raw/`, `graphify-out/`, or `LLM Wiki/graph/`
 - Quick mode is the default — proceed without blocking the user. Use `discuss` mode only when explicitly invoked.
-- `[[wikilinks]]` in body `## 관련` section only — never in frontmatter
+- `[[wikilinks]]` in body `## Related` section only — never in frontmatter
 - If graph.json doesn't exist, tell the user to run `/pocket-wiki <source>` first
