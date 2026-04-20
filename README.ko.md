@@ -17,8 +17,8 @@ raw/              →   graphify --update   →   graphify-out/graph.json
 ```
 
 1. URL, PDF, 글 등 소스를 `raw/`에 넣음
-2. [Graphify](https://github.com/swyxio/graphify)가 소스에서 지식 그래프를 추출
-3. Claude가 그래프로 효율적으로 탐색하고, 내 관점에 맞게 wiki 페이지를 작성
+2. [Graphify](https://github.com/safishamsi/graphify)가 소스에서 개념, 관계, "god node"(고연결 허브)를 추출해 지식 그래프를 만듦
+3. Claude가 그래프로 관련 컨텍스트를 효율적으로 탐색하고, 선택한 관점으로 wiki 페이지를 작성
 4. 다음 번 질문 시 Claude가 wiki를 먼저 읽음 — draft 페이지는 raw 소스와 교차 검증
 
 ## 사전 요구사항
@@ -27,7 +27,7 @@ raw/              →   graphify --update   →   graphify-out/graph.json
 - [Obsidian](https://obsidian.md)
 - [Claude Code](https://claude.ai/code)
 
-Graphify는 setup 스크립트가 자동으로 설치합니다.
+**[Graphify](https://github.com/safishamsi/graphify)** (`pip install graphifyy`) — 문서, 코드, 논문, URL을 질의 가능한 지식 그래프로 변환합니다. setup 스크립트가 자동으로 설치합니다.
 
 ## 설치
 
@@ -42,7 +42,7 @@ bash setup.sh
 ```
 
 setup 스크립트가 하는 일:
-1. [Graphify](https://github.com/swyxio/graphify) 설치 (`pip install graphifyy`)
+1. [Graphify](https://github.com/safishamsi/graphify) 설치 (`pip install graphifyy`)
 2. `/pocket-wiki` 스킬을 Claude Code에 등록 (`~/.claude/`)
 3. 폴더 구조 생성
 

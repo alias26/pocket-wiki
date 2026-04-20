@@ -17,9 +17,9 @@ raw/              →   graphify --update   →   graphify-out/graph.json
 ```
 
 1. You drop a source (URL, PDF, article) into `raw/`
-2. [Graphify](https://github.com/swyxio/graphify) extracts a knowledge graph from it
-3. Claude reads the graph to navigate efficiently, then writes wiki pages in your perspective
-4. Next time you ask a question, Claude reads the wiki first — draft pages get cross-checked against raw sources
+2. [Graphify](https://github.com/safishamsi/graphify) extracts a knowledge graph — concepts, relationships, and "god nodes" (high-degree hubs) — from your sources
+3. Claude navigates the graph to find relevant context efficiently, then writes wiki pages from your chosen perspective
+4. Next time you ask a question, Claude reads the wiki first — draft pages are cross-checked against raw sources
 
 ## Prerequisites
 
@@ -27,7 +27,7 @@ raw/              →   graphify --update   →   graphify-out/graph.json
 - [Obsidian](https://obsidian.md)
 - [Claude Code](https://claude.ai/code)
 
-Graphify is installed automatically by the setup script.
+**[Graphify](https://github.com/safishamsi/graphify)** (`pip install graphifyy`) — converts folders of docs, code, papers, and URLs into a queryable knowledge graph. Installed automatically by the setup script.
 
 ## Setup
 
@@ -42,7 +42,7 @@ bash setup.sh
 ```
 
 The setup script:
-1. Installs [Graphify](https://github.com/swyxio/graphify) via pip (`pip install graphifyy`)
+1. Installs [Graphify](https://github.com/safishamsi/graphify) via pip (`pip install graphifyy`)
 2. Registers the `/pocket-wiki` skill into Claude Code (`~/.claude/`)
 3. Creates the folder structure
 
