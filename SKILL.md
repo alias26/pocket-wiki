@@ -15,6 +15,8 @@ Manage a personal knowledge base built on Graphify + LLM Wiki pattern.
 /pocket-wiki discuss <url or title>   # ingest with perspective discussion
 /pocket-wiki query <question>         # query the wiki
 /pocket-wiki lint                     # health check
+/pocket-wiki review                   # list pages needing review
+/pocket-wiki review <slug or domain>  # review a specific page or domain
 /pocket-wiki decisions                # show decision history
 /pocket-wiki decisions add <title>    # record a new structural decision
 ```
@@ -42,6 +44,7 @@ Parse the argument after `/pocket-wiki`:
 - If it starts with `query` → run QUERY flow
 - If it starts with `lint` → run LINT flow
 - If it starts with `decisions` → run DECISIONS flow
+- If it starts with `review` → run REVIEW flow
 - If it starts with `discuss` → run INGEST flow in **discuss mode** (treat the rest as a URL or search term)
 - Otherwise → run INGEST flow in **quick mode** (default — treat the argument as a URL or search term)
 
@@ -179,6 +182,50 @@ Append to `LLM Wiki/_meta/log.md`:
 ```
 
 If lint results in a **structural recommendation that gets acted upon** (schema change, merge/split decision, new rule), append to `LLM Wiki/_meta/decisions.md` using the same format as INGEST Step 6.
+
+---
+
+## REVIEW flow
+
+For inspecting and refining wiki pages — assigning perspective, promoting status, fixing content. Works on any wiki page, not just quick-mode pages.
+
+### `/pocket-wiki review` (no argument)
+
+List pages that may need review, in this priority order:
+
+1. **Quick-mode drafts** with empty `perspective` (highest priority — they were ingested without discussion)
+2. **Drafts** older than 30 days that haven't been promoted
+3. **Stable pages** with `> ⚠️ Contradiction:` blockquotes still present (need resolution)
+4. **Recently quick-ingested pages** (last 7 days) regardless of perspective
+
+For each page, show: slug · status · perspective · domain · updated date · last source.
+
+Then ask the user which page(s) to review.
+
+### `/pocket-wiki review <argument>`
+
+Argument resolution:
+- If it matches a page slug exactly → enter interactive review for that page
+- If it matches a domain folder name (e.g. `network`, `data-structures`) → list reviewable pages in that domain
+- Otherwise → fuzzy-match against page slugs and offer suggestions
+
+### Interactive review for a single page
+
+1. Read the page and any linked `<slug>-source.md` files for context
+2. Show a brief summary: current frontmatter + 2–3 sentence content recap
+3. Ask the user what to change, in this order (skip if not applicable):
+   - **Perspective** — assign or change `perspective` field. Allowed: `systems`, `practitioner`, `theory`, `history`, `interview`, `math`
+   - **Status** — promote or change: `draft` → `stable` (reviewed and trusted) or `stable` → `archived` (outdated/superseded)
+   - **Tags** — add/remove tags
+   - **Content** — apply edits the user dictates (e.g. resolve a contradiction, add a section)
+4. Update the page's `updated` field to today
+5. Append to `LLM Wiki/_meta/log.md`:
+   ```
+   ## [YYYY-MM-DD] review | <slug>
+   변경 사항: <comma-separated list of what changed>
+   ```
+
+If the review involves a **structural decision** (e.g. promoting a page to stable establishes a new precedent, or resolving a contradiction sets a rule), also append to `_meta/decisions.md`.
 
 ---
 

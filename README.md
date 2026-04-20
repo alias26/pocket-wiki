@@ -74,6 +74,13 @@ Claude searches the wiki and answers. If wiki pages are missing, it reads raw so
 ```
 Checks for: broken wikilinks, orphan pages, semantic overlaps (pages sharing 3+ tags), unlinked mentions.
 
+### Review pages
+```
+/pocket-wiki review                   # list pages needing review
+/pocket-wiki review <slug or domain>  # review a specific page or domain
+```
+Assign `perspective`, promote `status` (draft → stable → archived), update tags or content. Especially useful for promoting quick-ingested pages once you've read them.
+
 ### Decision history
 ```
 /pocket-wiki decisions

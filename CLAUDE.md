@@ -193,6 +193,45 @@ suggested next sources: ...
 
 If lint results in a **structural change** (schema update, merge/split, new rule), also append to `_meta/decisions.md`.
 
+## REVIEW
+
+For inspecting and refining wiki pages — assigning perspective, promoting status, fixing content. Works on any wiki page, not just quick-mode pages.
+
+### `/pocket-wiki review` (no argument)
+
+List pages that may need review, in priority order:
+1. **Quick-mode drafts** with empty `perspective` (highest — ingested without discussion)
+2. **Drafts** older than 30 days that haven't been promoted
+3. **Stable pages** with `> ⚠️ Contradiction:` blockquotes still present
+4. **Recently quick-ingested pages** (last 7 days)
+
+Show: slug · status · perspective · domain · updated · last source. Then ask which to review.
+
+### `/pocket-wiki review <argument>`
+
+Argument resolution:
+- Matches a page slug exactly → interactive review for that page
+- Matches a domain folder → list reviewable pages in that domain
+- Otherwise → fuzzy-match against page slugs, offer suggestions
+
+### Interactive review for a single page
+
+1. Read the page and any linked source files for context
+2. Show summary: current frontmatter + 2–3 sentence content recap
+3. Ask, in order (skip if not applicable):
+   - **Perspective** — assign or change `perspective` field
+   - **Status** — promote: `draft` → `stable`, or `stable` → `archived`
+   - **Tags** — add/remove
+   - **Content** — apply user-dictated edits (resolve contradiction, add section, etc.)
+4. Update the page's `updated` field to today
+5. Append to `_meta/log.md`:
+   ```
+   ## [YYYY-MM-DD] review | <slug>
+   변경 사항: <what changed>
+   ```
+
+If review involves a **structural decision** (new precedent, contradiction-resolution rule), also append to `_meta/decisions.md`.
+
 ## DECISIONS
 
 Invoked via `/pocket-wiki decisions` or `/pocket-wiki decisions add <title>`.

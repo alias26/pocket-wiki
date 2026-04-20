@@ -74,6 +74,13 @@ Claude가 wiki를 검색하고 답변합니다. wiki 페이지가 없으면 raw 
 ```
 깨진 wikilink, 고아 페이지, 의미적 중복(태그 3개 이상 겹침), 누락 링크 등을 검사합니다.
 
+### 페이지 검토
+```
+/pocket-wiki review                   # 검토 후보 목록
+/pocket-wiki review <slug 또는 domain>  # 특정 페이지나 도메인 검토
+```
+`perspective` 부여, `status` 승격 (draft → stable → archived), 태그/내용 수정. quick으로 ingest한 페이지를 읽고 승격할 때 특히 유용합니다.
+
 ### 결정 이력
 ```
 /pocket-wiki decisions
