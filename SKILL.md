@@ -73,9 +73,15 @@ cd "$REPO_ROOT" && python -m graphify --update
 
 ### Step 3 — Discussion (mode-dependent)
 
-**Quick mode (default)** — skip discussion entirely:
-- No perspective conversation. Set `perspective: []` in new pages (user can fill in later via `review`).
-- If similar pages found (3+ shared tags or near-identical title), **auto-update** existing pages rather than asking. Mention what was auto-updated in the summary at the end.
+**Quick mode (default)** — fully autonomous, no user input:
+- **Auto-infer `perspective`** from source type and content. Never leave empty. Inference rules:
+  - Paper / arxiv / academic source → `theory` (add `math` if heavy formal content)
+  - Blog post / tutorial / how-to / docs with code → `practitioner`
+  - System internals / architecture / OS / hardware docs → `systems`
+  - Tech evolution / version history / changelog / comparison → `history`
+  - Interview prep / Q&A format → `interview`
+  - Combine multiple when content spans angles (e.g. applied ML paper → `[theory, practitioner]`)
+- If similar pages found (3+ shared tags or near-identical title), **auto-update** existing pages rather than asking. Mention what was auto-updated in the final summary.
 - Do not block on user input. Proceed straight to Step 4.
 
 **Discuss mode** (when invoked with `discuss` keyword) — current full conversation:
@@ -100,7 +106,7 @@ Create `LLM Wiki/wiki/sources/<slug>-source.md`:
 
 For each key concept or entity in the source:
 - If `LLM Wiki/wiki/<domain>/<concept>.md` exists → update it (note contradictions explicitly)
-- If it doesn't exist → create it as `wiki/<domain>/<slug>.md` with frontmatter: type=concept, domain, tags, **perspective** (from Step 3 discussion in discuss mode; `[]` in quick mode), updated (today), status=draft
+- If it doesn't exist → create it as `wiki/<domain>/<slug>.md` with frontmatter: type=concept, domain, tags, **perspective** (auto-inferred in quick mode; user-chosen in discuss mode), updated (today), status=draft
 
 A single source can touch 10-15 pages.
 
@@ -193,10 +199,10 @@ For inspecting and refining wiki pages — assigning perspective, promoting stat
 
 List pages that may need review, in this priority order:
 
-1. **Quick-mode drafts** with empty `perspective` (highest priority — they were ingested without discussion)
-2. **Drafts** older than 30 days that haven't been promoted
-3. **Stable pages** with `> ⚠️ Contradiction:` blockquotes still present (need resolution)
-4. **Recently quick-ingested pages** (last 7 days) regardless of perspective
+1. **Recently quick-ingested pages** (last 7 days) — verify the auto-inferred perspective is correct
+2. **Stable pages** with `> ⚠️ Contradiction:` blockquotes still present (need resolution)
+3. **Drafts** older than 30 days that haven't been promoted
+4. **Pages updated by recent ingest** that previously had `status: stable` — content drift may have introduced inaccuracies
 
 For each page, show: slug · status · perspective · domain · updated date · last source.
 

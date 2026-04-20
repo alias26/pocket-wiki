@@ -58,7 +58,7 @@ Then:
 /pocket-wiki <url or title>           # quick mode (default) — no discussion
 /pocket-wiki discuss <url or title>   # discuss perspective before writing
 ```
-**Quick mode** (default): Claude fetches the source, updates the graph, and writes wiki pages without blocking on a conversation. Pages are saved as `status: draft` with empty `perspective` for later review. Best for bulk ingestion.
+**Quick mode** (default): Claude fetches the source, updates the graph, and writes wiki pages without blocking. Pages get `status: draft` and an **auto-inferred `perspective`** based on source type (paper → theory, blog → practitioner, etc.). Best for bulk ingestion.
 
 **Discuss mode**: Claude shares key points, asks which perspective to emphasize, and confirms before writing. Best for sources you care about deeply.
 

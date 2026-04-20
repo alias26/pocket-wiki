@@ -84,8 +84,14 @@ Invoke the graphify skill: /graphify <POCKET_ROOT>/raw --update
 
 ### 3. Discussion (mode-dependent)
 
-**Quick mode (default)** — skip this step:
-- No perspective conversation. Set `perspective: []` in new pages (user can fill in later).
+**Quick mode (default)** — fully autonomous, no user input:
+- **Auto-infer `perspective`** from source type and content. Never leave empty. Inference rules:
+  - Paper / arxiv / academic source → `theory` (add `math` for heavy formal content)
+  - Blog / tutorial / how-to / docs with code → `practitioner`
+  - System internals / architecture / OS / hardware → `systems`
+  - Tech evolution / version comparison / changelog → `history`
+  - Interview prep / Q&A format → `interview`
+  - Combine multiple when content spans angles (e.g. applied ML paper → `[theory, practitioner]`)
 - If similar pages found (3+ shared tags or near-identical title), **auto-update** existing pages without asking. Mention what was auto-updated in the final summary.
 - Do not block on user input. Proceed to Step 4.
 
@@ -110,7 +116,7 @@ Create `wiki/sources/<slug>-source.md`:
 Identify concepts and entities from the source.
 - If a page exists → update it (explicitly note any contradictions with existing content)
 - If not → create `wiki/<domain>/<concept>.md`
-- frontmatter: type=concept, **perspective** (value chosen in Step 3 for discuss mode; `[]` for quick mode)
+- frontmatter: type=concept, **perspective** (auto-inferred in quick mode; user-chosen in discuss mode)
 
 **Update strategy:**
 - New information that extends existing content → append to the relevant section
@@ -200,10 +206,10 @@ For inspecting and refining wiki pages — assigning perspective, promoting stat
 ### `/pocket-wiki review` (no argument)
 
 List pages that may need review, in priority order:
-1. **Quick-mode drafts** with empty `perspective` (highest — ingested without discussion)
-2. **Drafts** older than 30 days that haven't been promoted
-3. **Stable pages** with `> ⚠️ Contradiction:` blockquotes still present
-4. **Recently quick-ingested pages** (last 7 days)
+1. **Recently quick-ingested pages** (last 7 days) — verify auto-inferred perspective
+2. **Stable pages** with `> ⚠️ Contradiction:` blockquotes still present
+3. **Drafts** older than 30 days that haven't been promoted
+4. **Stable pages updated by recent ingest** — content drift may have introduced inaccuracies
 
 Show: slug · status · perspective · domain · updated · last source. Then ask which to review.
 
