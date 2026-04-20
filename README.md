@@ -60,6 +60,30 @@ Claude searches the wiki and answers. If wiki pages are missing, it reads raw so
 ```
 /pocket-wiki lint
 ```
+Checks for broken wikilinks, orphan pages, semantic overlaps (pages sharing 3+ tags), and unlinked mentions (page titles appearing as plain text without `[[...]]`).
+
+### Decision history
+```
+/pocket-wiki decisions
+/pocket-wiki decisions add <title>
+```
+View or record structural decisions (schema changes, merge/split choices, workflow updates) in ADR format.
+
+## Concept page frontmatter
+
+```yaml
+---
+title:
+type: concept
+domain:
+tags: []
+perspective: []   # optional: systems | practitioner | theory | history | interview | math
+updated: YYYY-MM-DD
+status: draft | stable | archived
+---
+```
+
+`perspective` records the angle the page was written from — useful for filtering by focus area later.
 
 ## Folder structure
 
@@ -72,7 +96,11 @@ pocket-wiki/
 │   ├── wiki/
 │   │   ├── sources/     # <slug>-source.md per source
 │   │   └── <domain>/    # concept pages
-│   └── _meta/           # schema, index, log
+│   └── _meta/
+│       ├── schema.md    # frontmatter rules
+│       ├── decisions.md # ADR — why things are the way they are
+│       ├── index.md     # full wiki index (gitignored)
+│       └── log.md       # work log (gitignored)
 ├── graphify-out/    # graph.json (gitignored)
 ├── CLAUDE.md        # workflow instructions for Claude
 ├── SKILL.md         # /pocket-wiki skill definition
