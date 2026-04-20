@@ -121,14 +121,9 @@ pages created/updated: page1, page2, ...
 ```
 - Tag the entry with `(quick)` or `(discuss)` so the user can later filter for review.
 
-If Step 3 (discuss mode only) resulted in a **structural choice** (merge, split, new domain, new frontmatter field), append to `LLM Wiki/_meta/decisions.md`:
-```
-## [YYYY-MM-DD]: <decision title>
-- **Context**: <why this came up>
-- **Decision**: <what was decided>
-- **Impact**: <what changed>
-- **Alternatives**: <alternatives considered and why rejected>
-```
+If Step 3 (discuss mode only) resulted in a **wiki-structural choice** the user wants to remember (page merge, page split, new domain creation, naming convention they're adopting), append to `LLM Wiki/_meta/decisions.md`. See that file's template for format.
+
+Do NOT log changes to the pocket-wiki tool itself (schema fields, skill behavior, lint rules) — those belong in git history, not decisions.md.
 
 ---
 
@@ -187,7 +182,7 @@ issues found: ...
 suggested next sources: ...
 ```
 
-If lint results in a **structural recommendation that gets acted upon** (schema change, merge/split decision, new rule), append to `LLM Wiki/_meta/decisions.md` using the same format as INGEST Step 6.
+If lint results in a **wiki-level structural action** the user takes (merging two pages, splitting a page, renaming, resolving a contradiction one way), record it in `LLM Wiki/_meta/decisions.md`. Tool-level changes (new lint rules, schema fields) belong in git history, not decisions.md.
 
 ---
 
@@ -237,25 +232,29 @@ If the review involves a **structural decision** (e.g. promoting a page to stabl
 
 ## DECISIONS flow
 
+`decisions.md` records **wiki-level** structural choices the user makes — page splits, merges, domain boundaries, contradiction resolutions, naming conventions. NOT changes to the pocket-wiki tool (those are in git history).
+
 Read `LLM Wiki/_meta/decisions.md` before doing anything else.
 
 ### `/pocket-wiki decisions` (no subcommand)
 
-Display all decisions in reverse chronological order. Summarize in a readable format:
+Display all wiki decisions in reverse chronological order:
 - Date + title
 - One-line summary of what was decided and why
 
-Ask if the user wants to add a new decision or review a specific one in detail.
+If the file only contains the example template (no real entries yet), say so.
+
+Ask if the user wants to add a new decision or review one in detail.
 
 ### `/pocket-wiki decisions add <title>`
 
-Guide the user through recording a new structural decision interactively:
-1. Ask: **Context** — why was this decision needed?
-2. Ask: **Decision** — what was decided and how?
-3. Ask: **Impact** — what changes in existing pages or workflow?
+Guide the user through recording a new wiki decision interactively:
+1. Ask: **Context** — why did this come up while writing the wiki?
+2. Ask: **Decision** — what wiki change was made and how?
+3. Ask: **Impact** — which pages were affected, what links were updated?
 4. Ask: **Alternatives** — options considered but rejected? (omit if none)
 
-Then append to `LLM Wiki/_meta/decisions.md`:
+Then append to `LLM Wiki/_meta/decisions.md` (newest first, below the `<!-- Add new entries below -->` marker):
 ```
 ## [YYYY-MM-DD]: <title>
 - **Context**: ...
@@ -263,6 +262,8 @@ Then append to `LLM Wiki/_meta/decisions.md`:
 - **Impact**: ...
 - **Alternatives**: ... (only if applicable)
 ```
+
+If the user is trying to log a tool/skill change rather than a wiki change, redirect them: "That's a pocket-wiki tool change — git history is the right place. decisions.md is for wiki structure decisions."
 
 ---
 

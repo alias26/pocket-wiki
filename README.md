@@ -86,7 +86,7 @@ Assign `perspective`, promote `status` (draft → stable → archived), update t
 /pocket-wiki decisions
 /pocket-wiki decisions add <title>
 ```
-View or record structural decisions (schema changes, merge/split choices, workflow updates) in ADR format.
+View or record **wiki-level** structural decisions in ADR format — page splits, merges, domain boundaries, naming conventions, contradiction resolutions. (Tool/skill changes belong in git history, not here.)
 
 ## Concept page frontmatter
 
@@ -117,7 +117,7 @@ pocket-wiki/
 │   │   └── <domain>/    # concept pages
 │   └── _meta/
 │       ├── schema.md    # frontmatter rules
-│       ├── decisions.md # ADR — why things are the way they are
+│       ├── decisions.md # wiki structural decisions (page splits, merges, etc.)
 │       ├── index.md     # full wiki index (gitignored, local only)
 │       └── log.md       # work log (gitignored, local only)
 ├── graphify-out/        # graph.json — gitignored, local only

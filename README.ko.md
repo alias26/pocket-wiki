@@ -86,7 +86,7 @@ Claude가 wiki를 검색하고 답변합니다. wiki 페이지가 없으면 raw 
 /pocket-wiki decisions
 /pocket-wiki decisions add <제목>
 ```
-구조적 결정(스키마 변경, 페이지 병합/분리, 워크플로우 수정)을 ADR 형식으로 조회하거나 기록합니다.
+**위키 수준의** 구조적 결정을 ADR 형식으로 조회하거나 기록합니다 — 페이지 분리/병합, 도메인 경계, 명명 규칙, 모순 해소 등. (툴/스킬 변경은 git history에 남음, 여기는 아님.)
 
 ## Concept 페이지 frontmatter
 
@@ -117,7 +117,7 @@ pocket-wiki/
 │   │   └── <domain>/    # concept 페이지
 │   └── _meta/
 │       ├── schema.md    # frontmatter 규칙
-│       ├── decisions.md # ADR — 왜 이렇게 됐는가
+│       ├── decisions.md # 위키 구조 결정 (페이지 분리/병합 등)
 │       ├── index.md     # 전체 wiki 목록 (gitignore, 로컬 전용)
 │       └── log.md       # 작업 기록 (gitignore, 로컬 전용)
 ├── graphify-out/        # graph.json — gitignore, 로컬 전용

@@ -21,7 +21,7 @@ Converts raw sources into a knowledge graph, then compiles human-readable wiki p
     └── _meta/
         ├── index.md        Full wiki index (updated on every ingest)
         ├── log.md          Work log (append-only) — what was done
-        ├── decisions.md    Structural decision history (ADR) — why things are this way
+        ├── decisions.md    Wiki structural decisions (ADR) — page splits, merges, naming
         └── schema.md       Frontmatter rules
 ```
 
@@ -137,14 +137,9 @@ pages created/updated: page1, page2, ...
 ```
 Tag the entry with `(quick)` or `(discuss)` so the user can later filter for review.
 
-If Step 3 resulted in a **structural decision** (merge, split, new domain, new frontmatter field), also append to `_meta/decisions.md`:
-```
-## [YYYY-MM-DD]: <decision title>
-- **Context**: why this came up
-- **Decision**: what was decided and how
-- **Impact**: what changes as a result
-- **Alternatives**: considered options and why rejected (omit if none)
-```
+If Step 3 (discuss mode only) resulted in a **wiki-level structural choice** the user wants to remember (page merge, page split, new domain creation, naming convention), append to `_meta/decisions.md` (see that file's template).
+
+Do NOT log changes to the pocket-wiki tool itself (skill behavior, schema fields, lint rules) — those belong in git history, not decisions.md.
 
 ## QUERY
 
@@ -197,7 +192,7 @@ issues found: ...
 suggested next sources: ...
 ```
 
-If lint results in a **structural change** (schema update, merge/split, new rule), also append to `_meta/decisions.md`.
+If lint leads to a **wiki-level structural action** by the user (merging two pages, splitting a page, renaming, contradiction-resolution), record it in `_meta/decisions.md`. Tool-level changes (new lint rules, schema fields) belong in git history, not decisions.md.
 
 ## REVIEW
 
@@ -240,23 +235,26 @@ If review involves a **structural decision** (new precedent, contradiction-resol
 
 ## DECISIONS
 
+`decisions.md` records **wiki-level** structural choices — page splits, merges, domain boundaries, contradiction resolutions, naming conventions. NOT for changes to the pocket-wiki tool (those live in git history).
+
 Invoked via `/pocket-wiki decisions` or `/pocket-wiki decisions add <title>`.
 
 ### List (`decisions`)
 
-Read `_meta/decisions.md` and display all decisions in reverse chronological order.
-Each entry: date + title + one-line summary of what was decided and why.
+Read `_meta/decisions.md` and display all wiki decisions in reverse chronological order.
+Each entry: date + title + one-line summary.
+If the file only has the example template (no real entries yet), say so.
 Ask if the user wants to add a new decision or review one in detail.
 
 ### Record (`decisions add <title>`)
 
 Guide the user through the entry interactively:
-1. **Context** — why was this decision needed?
-2. **Decision** — what was decided and how?
-3. **Impact** — what changes in existing pages or workflow?
+1. **Context** — why did this come up while writing the wiki?
+2. **Decision** — what wiki change was made and how?
+3. **Impact** — which pages were affected, what links were updated?
 4. **Alternatives** — options considered but rejected? (omit if none)
 
-Append to `_meta/decisions.md`:
+Append to `_meta/decisions.md` (newest first, below the marker):
 ```
 ## [YYYY-MM-DD]: <title>
 - **Context**: ...
@@ -264,6 +262,8 @@ Append to `_meta/decisions.md`:
 - **Impact**: ...
 - **Alternatives**: ... (only if applicable)
 ```
+
+If the user is trying to log a tool/skill change rather than a wiki change, redirect them: "That's a pocket-wiki tool change — git history is the right place. decisions.md is for wiki structure decisions."
 
 ## Rules
 
