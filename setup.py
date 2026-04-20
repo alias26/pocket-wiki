@@ -43,15 +43,21 @@ def register_skill(repo_root: Path, home: Path) -> None:
     step(2, 4, "Registering Claude Code skill...")
 
     # Configure graphify for Claude Code
-    run([sys.executable, "-m", "graphify", "install", "--platform", "claude"], fatal=False)
+    exit_code = run(
+        [sys.executable, "-m", "graphify", "install", "--platform", "claude"],
+        fatal=False,
+    )
+    if exit_code != 0:
+        print(
+            "  WARNING: 'graphify install --platform claude' failed. "
+            "pocket-wiki skill registration below will continue, but verify "
+            "Claude Code can find both skills with: claude /graphify --help"
+        )
 
     skill_dir = home / ".claude" / "skills" / "pocket-wiki"
     skill_dir.mkdir(parents=True, exist_ok=True)
 
     skill_src = repo_root / "SKILL.md"
-    if not skill_src.exists():
-        print(f"ERROR: SKILL.md not found at {skill_src}")
-        sys.exit(1)
     shutil.copy2(skill_src, skill_dir / "SKILL.md")
 
     config = {"pocketRoot": str(repo_root).replace("\\", "/")}
@@ -99,12 +105,27 @@ def print_next_steps(repo_root: Path) -> None:
     print()
     print("Add a source:    /pocket-wiki <url or title>")
     print("Query the wiki:  /pocket-wiki query <question>")
+    print()
+    print("Note: LLM Wiki/wiki/ is empty until your first ingest -")
+    print("      domain folders (e.g. wiki/network/) are created automatically.")
+
+
+def preflight(repo_root: Path) -> None:
+    """Fail fast before any side effects (pip install, file writes)."""
+    skill_src = repo_root / "SKILL.md"
+    if not skill_src.exists():
+        sys.exit(
+            f"ERROR: SKILL.md not found at {skill_src}\n"
+            "Make sure you're running setup.py from inside the pocket-wiki "
+            "repository (where SKILL.md lives)."
+        )
 
 
 def main() -> None:
     repo_root = Path(__file__).parent.resolve()
     home = Path.home()
     print("Setting up pocket-wiki...\n")
+    preflight(repo_root)
     install_graphify()
     register_skill(repo_root, home)
     create_folders(repo_root)

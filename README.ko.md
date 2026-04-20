@@ -108,9 +108,10 @@ pocket-wiki/
 │   ├── files/           # 직접 추가한 파일
 │   └── crawled/         # /pocket-wiki가 가져온 파일
 ├── LLM Wiki/
+│   ├── graph/           # Graphify --obsidian 출력 (자동 생성, 수정 금지)
 │   ├── wiki/
 │   │   ├── sources/     # 소스별 <slug>-source.md
-│   │   └── <domain>/    # concept 페이지
+│   │   └── <domain>/    # concept 페이지 (해당 도메인 첫 ingest 시 생성)
 │   └── _meta/
 │       ├── schema.md    # frontmatter 규칙 + status 전이
 │       ├── decisions.md # 위키 구조 결정 (페이지 분리/병합 등)

@@ -108,9 +108,10 @@ pocket-wiki/
 │   ├── files/           # manually added files
 │   └── crawled/         # fetched by /pocket-wiki
 ├── LLM Wiki/
+│   ├── graph/           # Graphify --obsidian output (auto-generated, never modify)
 │   ├── wiki/
 │   │   ├── sources/     # <slug>-source.md per source
-│   │   └── <domain>/    # concept pages
+│   │   └── <domain>/    # concept pages (created on first ingest into a domain)
 │   └── _meta/
 │       ├── schema.md    # frontmatter rules + status transitions
 │       ├── decisions.md # wiki structural decisions (page splits, merges, etc.)
