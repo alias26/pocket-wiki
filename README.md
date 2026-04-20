@@ -137,6 +137,12 @@ git push
 
 `raw/` is intentionally local-only. If you need to back it up, use a separate sync tool (e.g. rsync, Syncthing, or a private cloud folder).
 
+## Bug reports & feedback
+
+For pocket-wiki tool / skill issues (setup failures, unexpected agent behavior, doc bugs), please open an issue on the [GitHub Issues tab](https://github.com/alias26/pocket-wiki/issues).
+
+`_meta/decisions.md` is for **your own wiki** structural decisions, not for tool issues — keeping these separate prevents tool noise from polluting your wiki notes.
+
 ## License
 
 [MIT](LICENSE)

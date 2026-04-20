@@ -136,6 +136,12 @@ git push
 
 `raw/`는 의도적으로 로컬 전용입니다. 백업이 필요하면 rsync, Syncthing, 또는 private 클라우드 폴더를 사용하세요.
 
+## 버그 리포트 & 피드백
+
+pocket-wiki 툴/스킬 이슈 (설치 실패, 에이전트 동작 이상, 문서 버그)는 [GitHub Issues 탭](https://github.com/alias26/pocket-wiki/issues)에 올려주세요.
+
+`_meta/decisions.md`는 **본인 위키의 구조적 결정**용입니다 — 툴 이슈와 분리해야 위키 노트가 노이즈로 오염되지 않습니다.
+
 ## 라이선스
 
 [MIT](LICENSE)

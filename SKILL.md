@@ -280,3 +280,4 @@ If the user is trying to log a tool/skill change rather than a wiki change, redi
 - Quick mode is the default — proceed without blocking the user. Use `discuss` mode only when explicitly invoked.
 - `[[wikilinks]]` in body `## Related` section only — never in frontmatter
 - If graph.json doesn't exist, tell the user to run `/pocket-wiki <source>` first
+- For pocket-wiki tool/skill bugs or feature requests, direct the user to file a GitHub issue (`https://github.com/alias26/pocket-wiki/issues`). Do NOT log them in `_meta/decisions.md` — that file is for the user's wiki structure decisions only.

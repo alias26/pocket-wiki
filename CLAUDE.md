@@ -279,3 +279,4 @@ If the user is trying to log a tool/skill change rather than a wiki change, redi
 - Never modify files in `graphify-out/`
 - Never modify files in the `graph/` folder
 - Quick mode is the default — proceed without blocking the user. Use discuss mode only when the `discuss` keyword is explicitly given.
+- For pocket-wiki tool/skill bugs or feature requests, direct the user to file a GitHub issue (`https://github.com/alias26/pocket-wiki/issues`). Do NOT log them in `_meta/decisions.md` — that file is for the user's wiki structure decisions only.
