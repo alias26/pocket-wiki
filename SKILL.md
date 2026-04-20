@@ -59,9 +59,13 @@ If it fails, tell the user what went wrong and stop.
 
 ### Step 2 — Update graph
 
-```bash
-cd "$REPO_ROOT" && python -m graphify --update
+Invoke the graphify skill with the raw directory and --update flag:
+
 ```
+/graphify $POCKET_ROOT/raw --update
+```
+
+This runs incremental extraction on new/changed files and merges them into graph.json. Wait for it to complete before proceeding.
 
 ### Step 3 — Discuss with user
 
